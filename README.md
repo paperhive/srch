@@ -1,0 +1,1 @@
+# srch [![Build Status](https://travis-ci.org/paperhive/srch.svg?branch=master)](https://travis-ci.org/paperhive/srch) [![codecov](https://codecov.io/gh/paperhive/srch/branch/master/graph/badge.svg)](https://codecov.io/gh/paperhive/srch)
