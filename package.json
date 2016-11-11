@@ -1,0 +1,23 @@
+{
+  "name": "srch",
+  "version": "1.0.0",
+  "description": "full text search",
+  "main": "src/index.js",
+  "scripts": {
+    "cover": "nyc --reporter=lcov npm test",
+    "codecov": "npm run cover && codecov",
+    "lint": "eslint src test",
+    "test": "mocha test"
+  },
+  "devDependencies": {
+    "codecov": "^1.0.1",
+    "eslint": "^3.5.0",
+    "eslint-config-airbnb": "^13.0.0",
+    "eslint-plugin-import": "^2.2.0",
+    "mocha": "^3.0.2",
+    "nyc": "^8.3.0",
+    "should": "^11.1.0"
+  },
+  "author": "Jennifer Gebske <jennifer@paperhive.org>",
+  "license": "GPL-3.0"
+}
