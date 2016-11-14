@@ -6,7 +6,7 @@ describe('findPositions()', () => {
   });
 
   it('should return multiple adjacent positions', () => {
-    srch.findPositions('testtest', 'test').should.eql([0, 4]);
+    srch.findPositions('testtest', 'Test').should.eql([0, 4]);
   });
 
   it('should return multiple positions', () => {

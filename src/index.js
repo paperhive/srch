@@ -1,5 +1,11 @@
 exports.findPositions = function findPositions(fullstr, searchstr) {
-  return [];
+  const regExpSearchstr = new RegExp(searchstr, 'gi');
+  let match = [];
+  const matches = [];
+  while ((match = regExpSearchstr.exec(fullstr)) !== null) {
+    matches.push(match.index);
+  }
+  return matches;
 };
 
 exports.transformSpaces = function transformSpaces(str) {
