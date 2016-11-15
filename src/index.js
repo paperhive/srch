@@ -8,6 +8,7 @@ exports.findPositions = function findPositions(fullstr, searchstr) {
   return matches;
 };
 
+
 exports.transformSpaces = function transformSpaces(str) {
   const mapping = [];
   let lastOffsetOriginal = 0;
@@ -37,6 +38,24 @@ exports.transformSpaces = function transformSpaces(str) {
   return { str: transformedStr, mapping };
 };
 
+function transformPosition(position, mapping) {
+  let lastOffsetOriginal = 0;
+  let runningPosition = position;
+
+  for (let i = 0; i < mapping.length; i += 1) {
+    const map = mapping[i];
+
+    if (runningPosition < map.transformed) {
+      return lastOffsetOriginal + Math.min(runningPosition, map.original - 1);
+    }
+
+    lastOffsetOriginal += map.original;
+    runningPosition -= map.transformed;
+  }
+
+  throw new Error('incorrect position/mapping combination');
+}
+
 exports.backTransformPositions = function backTransformPositions(positions, mapping) {
-  return [];
+  return positions.map(position => transformPosition(position, mapping));
 };

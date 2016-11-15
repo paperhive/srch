@@ -45,10 +45,12 @@ describe('backTransformPositions()', () => {
     srch.backTransformPositions(
       [0, 1, 2, 3, 4, 5, 6, 7, 8],
       [
-        { transformed: 7, original: 6 },
+        { transformed: 1, original: 1 },
+        { transformed: 2, original: 1 },
+        { transformed: 4, original: 4 },
         { transformed: 0, original: 1 },
         { transformed: 5, original: 5 },
       ]
-    ).should.eql([0, 1, 1, 2, 3, 4, 5, 6, 7]);
+    ).should.eql([0, 1, 1, 2, 3, 4, 5, 7, 8]);
   });
 });
