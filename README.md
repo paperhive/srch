@@ -5,7 +5,7 @@
 ### findPositions(fullstr, searchstr)
 - returns all positions of *searchstr* in *fullstr* as an array
 ```
-findPositions('Hello world', 'World');
+findPositions('Hello world', 'world');
 =>  [6]
 ```
 
@@ -29,7 +29,7 @@ transformSpaces('Hello   world');
 ```
 backTransformPositions(
   [6],
-  [ 
+  [
     { transformed: 6, original: 6 },
     { transformed: 0, original: 2 },
     { transformed: 5, original: 5 },

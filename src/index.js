@@ -1,5 +1,10 @@
+// cf. https://github.com/sindresorhus/escape-string-regexp
+function escapeRegExpCharacters(str) {
+  return str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
+}
+
 exports.findPositions = function findPositions(fullstr, searchstr) {
-  const regExpSearchstr = new RegExp(searchstr, 'gi');
+  const regExpSearchstr = new RegExp(escapeRegExpCharacters(searchstr), 'g');
   let match = [];
   const matches = [];
   while ((match = regExpSearchstr.exec(fullstr)) !== null) {
