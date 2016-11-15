@@ -9,7 +9,32 @@ exports.findPositions = function findPositions(fullstr, searchstr) {
 };
 
 exports.transformSpaces = function transformSpaces(str) {
-  return {str: '', mapping: [{ transformed: 0, original: 0 }]};
+  const mapping = [];
+  let lastOffsetOriginal = 0;
+  let lastOffsetTransformed = 0;
+  const transformedStr = str.replace(/\s{2,}/g, (match, offset) => {
+    const remain = (offset - lastOffsetOriginal) + 1;
+    mapping.push({ transformed: remain, original: remain });
+    mapping.push({ transformed: 0, original: match.length - 1 });
+
+    lastOffsetOriginal = offset + match.length;
+    lastOffsetTransformed += remain;
+
+    return ' ';
+  });
+
+  const lenRestTransformed = transformedStr.length - lastOffsetTransformed;
+  const lenRestOriginal = str.length - lastOffsetOriginal;
+
+  if (lenRestOriginal !== lenRestTransformed) throw new Error('strings out of sync');
+  if (lenRestOriginal) {
+    mapping.push({
+      transformed: transformedStr.length - lastOffsetTransformed,
+      original: str.length - lastOffsetOriginal,
+    });
+  }
+
+  return { str: transformedStr, mapping };
 };
 
 exports.backTransformPositions = function backTransformPositions(positions, mapping) {
