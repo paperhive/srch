@@ -6,7 +6,7 @@ describe('findPositions()', () => {
   });
 
   it('should return multiple adjacent positions', () => {
-    srch.findPositions('testtest', 'Test').should.eql([0, 4]);
+    srch.findPositions('testtest', 'test').should.eql([0, 4]);
   });
 
   it('should return multiple positions', () => {
@@ -15,6 +15,11 @@ describe('findPositions()', () => {
 
   it('should escape RegExp characters', () => {
     srch.findPositions('a [nasty] string', '[nasty]').should.eql([2]);
+  });
+
+  // test case sensitivity
+  it('should return an empty array if there is no exact match', () => {
+    srch.findPositions('testtest', 'Test').should.eql([]);
   });
 });
 
