@@ -12,6 +12,10 @@ describe('findPositions()', () => {
   it('should return multiple positions', () => {
     srch.findPositions('wow, test and test!', 'test').should.eql([5, 14]);
   });
+
+  it('should escape RegExp characters', () => {
+    srch.findPositions('a [nasty] string', '[nasty]').should.eql([2]);
+  });
 });
 
 describe('transformSpaces', () => {
