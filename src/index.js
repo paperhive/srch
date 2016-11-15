@@ -38,24 +38,33 @@ exports.transformSpaces = function transformSpaces(str) {
   return { str: transformedStr, mapping };
 };
 
-function transformPosition(position, mapping) {
-  let lastOffsetOriginal = 0;
-  let runningPosition = position;
 
+// assumes that elements in positions are sorted
+exports.backTransformPositions = function backTransformPositions(positions, mapping) {
+  const transformedPositions = [];
+  let positionIndex = 0;
+  let offsetOriginal = 0;
+  let offsetTransformed = 0;
   for (let i = 0; i < mapping.length; i += 1) {
     const map = mapping[i];
 
-    if (runningPosition < map.transformed) {
-      return lastOffsetOriginal + Math.min(runningPosition, map.original - 1);
+    // transform all positions in this map
+    while (positionIndex < positions.length &&
+        positions[positionIndex] < offsetTransformed + map.transformed) {
+      // transform position
+      const normalizedPosition = positions[positionIndex] - offsetTransformed;
+
+      transformedPositions.push(
+        offsetOriginal + Math.min(normalizedPosition, map.original - 1)
+      );
+
+      positionIndex += 1;
     }
+    if (positionIndex === positions.length) break;
 
-    lastOffsetOriginal += map.original;
-    runningPosition -= map.transformed;
+    // update offsets
+    offsetOriginal += map.original;
+    offsetTransformed += map.transformed;
   }
-
-  throw new Error('incorrect position/mapping combination');
-}
-
-exports.backTransformPositions = function backTransformPositions(positions, mapping) {
-  return positions.map(position => transformPosition(position, mapping));
+  return transformedPositions;
 };

@@ -43,7 +43,7 @@ describe('backTransformPositions()', () => {
     // original:    'hällo  world'
     // transformed: 'haello world'
     srch.backTransformPositions(
-      [0, 1, 2, 3, 4, 5, 6, 7, 8],
+      [0, 1, 2, 3, 4, 5, 6, 7, 8, 11],
       [
         { transformed: 1, original: 1 },
         { transformed: 2, original: 1 },
@@ -51,6 +51,6 @@ describe('backTransformPositions()', () => {
         { transformed: 0, original: 1 },
         { transformed: 5, original: 5 },
       ]
-    ).should.eql([0, 1, 1, 2, 3, 4, 5, 7, 8]);
+    ).should.eql([0, 1, 1, 2, 3, 4, 5, 7, 8, 11]);
   });
 });
