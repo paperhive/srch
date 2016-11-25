@@ -63,3 +63,25 @@ describe('backTransformPositions()', () => {
     ).should.eql([0, 1, 1, 2, 3, 4, 5, 7, 8, 11]);
   });
 });
+
+const searchTransformations = [
+  {original: 3, transformed: 3, textObject: 1},
+  {original: 0, transformed: 1},
+  {original: 2, transformed: 2, textObject: 2},
+  {original: 0, transformed: 1},
+  {original: 25, transformed: 25, textObject: 3},
+];
+
+const range = {position: 0, length: 10};
+
+const output = [
+  {position: 0, length: 3, transformation: searchTransformations[0]},
+  {position: 0, length: 2, transformation: searchTransformations[2]},
+  {position: 0, length: 3, transformation: searchTransformations[4]},
+];
+
+describe('backTransformRange', () => {
+  it('should backtransform to ranges', () => {
+    srch.backTransformRange(range, searchTransformations).should.eql(output);
+  });
+});
