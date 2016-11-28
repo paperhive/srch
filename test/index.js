@@ -64,24 +64,71 @@ describe('backTransformPositions()', () => {
   });
 });
 
-const range = {position: 1, length: 10};
-
-const searchTransformations = [
-  {original: 3, transformed: 3, textObject: 1},
-  {original: 0, transformed: 1},
-  {original: 2, transformed: 2, textObject: 2},
-  {original: 0, transformed: 1},
-  {original: 25, transformed: 25, textObject: 3},
-];
-
-const output = [
-  {position: 1, length: 2, transformation: searchTransformations[0].textObject},
-  {position: 0, length: 2, transformation: searchTransformations[2].textObject},
-  {position: 0, length: 4, transformation: searchTransformations[4].textObject},
-];
-
 describe('backTransformRange', () => {
+  const transformations = [
+    {original: 3, transformed: 3, textObject: 1},
+    {original: 0, transformed: 1},
+    {original: 2, transformed: 2, textObject: 2},
+    {original: 0, transformed: 1},
+    {original: 25, transformed: 25, textObject: 3},
+  ];
+
   it('should backtransform to ranges', () => {
-    srch.backTransformRange(range, searchTransformations).should.eql(output);
+    srch.backTransformRange({position: 1, length: 10}, transformations)
+      .should.eql([
+        {position: 1, length: 2, transformation: transformations[0]},
+        {position: 0, length: 2, transformation: transformations[2]},
+        {position: 0, length: 4, transformation: transformations[4]},
+      ]);
+  });
+
+  it('should backtransform to ranges', () => {
+    srch.backTransformRange({position: 4, length: 10}, transformations)
+      .should.eql([
+        {position: 0, length: 2, transformation: transformations[2]},
+        {position: 0, length: 7, transformation: transformations[4]},
+      ]);
+  });
+
+  it('should backtransform to ranges', () => {
+    srch.backTransformRange({position: 5, length: 10}, transformations)
+      .should.eql([
+        {position: 1, length: 1, transformation: transformations[2]},
+        {position: 0, length: 8, transformation: transformations[4]},
+      ]);
+  });
+
+  it('should backtransform to ranges', () => {
+    srch.backTransformRange({position: 6, length: 10}, transformations)
+      .should.eql([
+        {position: 0, length: 9, transformation: transformations[4]},
+      ]);
+  });
+
+  it('should backtransform with position 0', () => {
+    srch.backTransformRange({position: 0, length: 4}, transformations)
+      .should.eql([
+        {position: 0, length: 3, transformation: transformations[0]},
+      ]);
+  });
+
+  it('should backtransform with empty result range', () => {
+    srch.backTransformRange({position: 3, length: 1}, transformations)
+      .should.eql([]);
+  });
+
+  it('should throw if range outside of transformation ranges', () => {
+    (() => srch.backTransformRange({position: 33, length: 1}, transformations))
+      .should.throw('Out of range');
+  });
+
+  it('should throw if range outside of transformation ranges', () => {
+    (() => srch.backTransformRange({position: -2, length: 1}, transformations))
+      .should.throw('Out of range');
+  });
+
+  it('should throw if transformations are empty', () => {
+    (() => srch.backTransformRange({position: 0, length: 1}, []))
+      .should.throw('Empty transformations');
   });
 });
