@@ -73,3 +73,38 @@ exports.backTransformPositions = function backTransformPositions(positions, mapp
   }
   return transformedPositions;
 };
+
+exports.backTransformRange = function backTransformRange(range, transformations) {
+  let rangeCount = range.length + range.position;
+  let rangePosition = range.position;
+  const output = [];
+  if (transformations.length === 0) throw new Error('Empty transformations');
+  transformations.forEach((transformation) => {
+    if (rangeCount <= 0) return;
+
+    if (transformation.transformed > rangePosition) {
+      const newPosition = rangePosition;
+      let newLength;
+      if (transformation.transformed > rangeCount) {
+        newLength = rangeCount;
+      } else {
+        newLength = transformation.transformed - rangePosition;
+      }
+      rangePosition = 0;
+      if (transformation.original > 0) {
+        output.push({
+          position: newPosition,
+          length: newLength,
+          transformation,
+        });
+      }
+    }
+    if (rangePosition > 0) {
+      rangePosition -= transformation.transformed;
+    }
+    rangeCount -= transformation.transformed;
+  });
+
+  if (rangePosition !== 0) throw new Error('Out of range');
+  return output;
+};

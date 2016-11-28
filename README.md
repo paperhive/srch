@@ -34,6 +34,35 @@ backTransformPositions(
     { transformed: 0, original: 2 },
     { transformed: 5, original: 5 },
   ],
-)
+);
 =>  [8]
+```
+
+### backTransformRange(range, transformations)
+- transforms range back to original (untransformed) string
+```
+const transformations = [
+  {original: 3, transformed: 3, textObject: 1},
+  {original: 0, transformed: 1, whitespace: true},
+  {original: 2, transformed: 2, textObject: 2},
+  {original: 0, transformed: 1, whitespace: true},
+  {original: 25, transformed: 25, textObject: 3},
+];
+
+backTransformRange({position: 0, length: 4}, transformations);
+=>  [{
+      position: 0,
+      length: 3,
+      transformation:
+        {original: 3, transformed: 3, textObject: 1}
+    }]
+
+backTransformRange({position: 6, length: 10}, transformations);
+=>  [{
+      position: 0,
+      length: 9,
+      transformation:
+        {original: 25, transformed: 25, textObject: 3}
+    }]
+
 ```
