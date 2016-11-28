@@ -73,3 +73,32 @@ exports.backTransformPositions = function backTransformPositions(positions, mapp
   }
   return transformedPositions;
 };
+
+exports.backTransformRange = function backTransformRange(range, searchTransformations) {
+  let rangeCount = range.length + range.position;
+  let rangePosition = range.position;
+  const output = [];
+  searchTransformations.forEach((transformation) => {
+    if (rangeCount > 0) {
+      if (transformation.transformed > rangePosition) {
+        const newPosition = rangePosition;
+        let newLength;
+        if (transformation.transformed > rangeCount) {
+          newLength = rangeCount;
+        } else {
+          newLength = transformation.transformed - rangePosition;
+        }
+        rangePosition = 0;
+        if (transformation.textObject) {
+          output.push({
+            position: newPosition,
+            length: newLength,
+            transformation: transformation.textObject,
+          });
+        }
+      }
+      rangeCount -= transformation.transformed;
+    }
+  });
+  return output;
+};

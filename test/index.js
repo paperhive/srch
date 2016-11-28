@@ -64,6 +64,8 @@ describe('backTransformPositions()', () => {
   });
 });
 
+const range = {position: 1, length: 10};
+
 const searchTransformations = [
   {original: 3, transformed: 3, textObject: 1},
   {original: 0, transformed: 1},
@@ -72,12 +74,10 @@ const searchTransformations = [
   {original: 25, transformed: 25, textObject: 3},
 ];
 
-const range = {position: 0, length: 10};
-
 const output = [
-  {position: 0, length: 3, transformation: searchTransformations[0]},
-  {position: 0, length: 2, transformation: searchTransformations[2]},
-  {position: 0, length: 3, transformation: searchTransformations[4]},
+  {position: 1, length: 2, transformation: searchTransformations[0].textObject},
+  {position: 0, length: 2, transformation: searchTransformations[2].textObject},
+  {position: 0, length: 4, transformation: searchTransformations[4].textObject},
 ];
 
 describe('backTransformRange', () => {
