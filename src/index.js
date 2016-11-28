@@ -78,8 +78,9 @@ exports.backTransformRange = function backTransformRange(range, transformations)
   let rangeCount = range.length + range.position;
   let rangePosition = range.position;
   const output = [];
+  if (transformations.length === 0) throw new Error('Empty transformations');
   transformations.forEach((transformation) => {
-    if (!rangeCount) return;
+    if (rangeCount <= 0) return;
 
     if (transformation.transformed > rangePosition) {
       const newPosition = rangePosition;
@@ -103,5 +104,7 @@ exports.backTransformRange = function backTransformRange(range, transformations)
     }
     rangeCount -= transformation.transformed;
   });
+
+  if (rangePosition !== 0) throw new Error('Out of range');
   return output;
 };

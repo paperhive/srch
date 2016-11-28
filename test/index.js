@@ -67,22 +67,40 @@ describe('backTransformPositions()', () => {
 describe('backTransformRange', () => {
   const transformations = [
     {original: 3, transformed: 3, textObject: 1},
-    {original: 0, transformed: 1},
+    {original: 0, transformed: 1, whitespace: true},
     {original: 2, transformed: 2, textObject: 2},
-    {original: 0, transformed: 1},
+    {original: 0, transformed: 1, whitespace: true},
     {original: 25, transformed: 25, textObject: 3},
+    {original: 10, transformed: 1, whitespace: true},
+    {original: 5, transformed: 5, textObject: 4},
   ];
 
-  it('should backtransform to ranges', () => {
-    srch.backTransformRange({position: 1, length: 10}, transformations)
+  // removes whitespace at the end
+  it('should backtransform 1 range with position 0', () => {
+    srch.backTransformRange({position: 0, length: 4}, transformations)
       .should.eql([
-        {position: 1, length: 2, transformation: transformations[0]},
-        {position: 0, length: 2, transformation: transformations[2]},
-        {position: 0, length: 4, transformation: transformations[4]},
+        {position: 0, length: 3, transformation: transformations[0]},
       ]);
   });
 
-  it('should backtransform to ranges', () => {
+  // no whitepace involved
+  it('should backtransform 1 range with position 4', () => {
+    srch.backTransformRange({position: 4, length: 2}, transformations)
+      .should.eql([
+        {position: 0, length: 2, transformation: transformations[2]},
+      ]);
+  });
+
+  // removes whitespace at the beginning
+  it('should backtransform 1 range with position 6', () => {
+    srch.backTransformRange({position: 6, length: 10}, transformations)
+      .should.eql([
+        {position: 0, length: 9, transformation: transformations[4]},
+      ]);
+  });
+
+  // removes whitespace in the middle
+  it('should backtransform 2 ranges with positon 4', () => {
     srch.backTransformRange({position: 4, length: 10}, transformations)
       .should.eql([
         {position: 0, length: 2, transformation: transformations[2]},
@@ -90,7 +108,8 @@ describe('backTransformRange', () => {
       ]);
   });
 
-  it('should backtransform to ranges', () => {
+  // removes whitespace in the middle; starts within a text interval
+  it('should backtransform 2 ranges with position 5', () => {
     srch.backTransformRange({position: 5, length: 10}, transformations)
       .should.eql([
         {position: 1, length: 1, transformation: transformations[2]},
@@ -98,17 +117,13 @@ describe('backTransformRange', () => {
       ]);
   });
 
-  it('should backtransform to ranges', () => {
-    srch.backTransformRange({position: 6, length: 10}, transformations)
+  // removes whitespace in the middle; starts within a text interval
+  it('should backtransform 3 ranges with position 1', () => {
+    srch.backTransformRange({position: 1, length: 11}, transformations)
       .should.eql([
-        {position: 0, length: 9, transformation: transformations[4]},
-      ]);
-  });
-
-  it('should backtransform with position 0', () => {
-    srch.backTransformRange({position: 0, length: 4}, transformations)
-      .should.eql([
-        {position: 0, length: 3, transformation: transformations[0]},
+        {position: 1, length: 2, transformation: transformations[0]},
+        {position: 0, length: 2, transformation: transformations[2]},
+        {position: 0, length: 5, transformation: transformations[4]},
       ]);
   });
 
@@ -118,7 +133,7 @@ describe('backTransformRange', () => {
   });
 
   it('should throw if range outside of transformation ranges', () => {
-    (() => srch.backTransformRange({position: 33, length: 1}, transformations))
+    (() => srch.backTransformRange({position: 39, length: 1}, transformations))
       .should.throw('Out of range');
   });
 
