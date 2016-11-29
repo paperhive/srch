@@ -108,3 +108,51 @@ exports.backTransformRange = function backTransformRange(range, transformations)
   if (rangePosition !== 0) throw new Error('Out of range');
   return output;
 };
+
+function transformLowercase(str) {
+  return {
+    str: str.toLowerCase(),
+    mapping: [{transformed: str.length, original: str.length}],
+  };
+}
+
+function transform(transformations, str) {
+  let transformedStr = str;
+  const mappings = [];
+  transformations.forEach((transformation) => {
+    const {newStr, mapping} = transformation(transformedStr);
+    transformedStr = newStr;
+    mappings.push(mapping);
+  });
+  return {transformedStr, mapping: mappings};
+}
+
+
+exports.SearchIndex = class SearchIndex {
+  constructor(str) {
+    this.transformations = [exports.transformSpaces, transformLowercase];
+
+    const {transformedStr, mapping} = transform(this.transformations, str);
+    this.transformedStr = transformedStr;
+    this.mappings = mapping;
+  }
+
+  // returns ranges
+  search(searchStr) {
+    const {transformedStr} = transform(this.transformations, searchStr);
+    const matchPositions = exports.findPositions(this.transformedStr, transformedStr);
+    // returns array of ranges: [{ length: 6, position: 138 }, ...]
+    let matchRanges = matchPositions.map(position => ({position, length: searchStr.length}));
+
+    // reverse(this.mappings).forEach(mapping => {
+    //   console.log(matchRanges);
+    //   matchRanges = matchRanges.map(range => {
+    //     const transformedRanges = srch.backTransformRange(range, mapping);
+    //     let length = 0;
+    //     // transformedRanges.
+    //   });
+    // });
+    // console.log(JSON.stringify(matchRanges, undefined, 2));
+    // return matchRanges;
+  }
+};
