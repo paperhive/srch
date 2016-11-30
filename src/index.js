@@ -137,7 +137,6 @@ exports.SearchIndex = class SearchIndex {
     this.mappings = mapping;
   }
 
-  // returns ranges
   search(searchStr) {
     const {transformedStr} = transform(this.transformations, searchStr);
     if (transformedStr.length === 0) throw new Error('transformed string is empty');
