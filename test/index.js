@@ -147,3 +147,38 @@ describe('backTransformRange', () => {
       .should.throw('Empty transformations');
   });
 });
+
+describe('SearchIndex', () => {
+  it('should find ranges', () => {
+    const index = new srch.SearchIndex('this  is a  test');
+    index.search('is a test').should.eql([{position: 6, length: 10}]);
+  });
+
+  it('should find ranges with spaces at the end and beginning', () => {
+    const index = new srch.SearchIndex('   hello  world  ');
+    index.search('hello world').should.eql([{position: 3, length: 12}]);
+  });
+
+  it('should find ranges: transformed string equals original', () => {
+    const index = new srch.SearchIndex('hello world');
+    index.search('hello world').should.eql([{position: 0, length: 11}]);
+  });
+
+  it('should find ranges: 2 occurences of searchStr in text', () => {
+    const index = new srch.SearchIndex('hello world, hello world');
+    index.search('hello world').should.eql([{position: 0, length: 11}, {position: 13, length: 11}]);
+  });
+
+  it('should find ranges: 2 occurences of searchStr in text with spaces', () => {
+    const index = new srch.SearchIndex('  hello   world ,  hello    world   ');
+    index.search('hello world').should.eql([{position: 2, length: 13}, {position: 19, length: 14}]);
+  });
+
+  it('should find ranges: mixed lower and upper case', () => {
+    const index = new srch.SearchIndex('TEST test TEst TeSt  ');
+    index.search('test').should.eql([
+      {position: 0, length: 4}, {position: 5, length: 4},
+      {position: 10, length: 4}, {position: 15, length: 4},
+    ]);
+  });
+});

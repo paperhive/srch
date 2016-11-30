@@ -108,3 +108,54 @@ exports.backTransformRange = function backTransformRange(range, transformations)
   if (rangePosition !== 0) throw new Error('Out of range');
   return output;
 };
+
+function transformLowercase(str) {
+  return {
+    str: str.toLowerCase(),
+    mapping: [{transformed: str.length, original: str.length}],
+  };
+}
+
+function transform(transformations, str) {
+  let transformedStr = str;
+  const mappings = [];
+  transformations.forEach((transformation) => {
+    const {str: newStr, mapping} = transformation(transformedStr);
+    transformedStr = newStr;
+    mappings.push(mapping);
+  });
+  return {transformedStr, mapping: mappings};
+}
+
+
+exports.SearchIndex = class SearchIndex {
+  constructor(str) {
+    this.transformations = [exports.transformSpaces, transformLowercase];
+
+    const {transformedStr, mapping} = transform(this.transformations, str);
+    this.transformedStr = transformedStr;
+    this.mappings = mapping;
+  }
+
+  search(searchStr) {
+    const {transformedStr} = transform(this.transformations, searchStr);
+    if (transformedStr.length === 0) throw new Error('transformed string is empty');
+
+    // end position points to the last character
+    let startPositions = exports.findPositions(this.transformedStr, transformedStr);
+    let endPositions = startPositions.map(position => position + (transformedStr.length - 1));
+
+    // note: slice() copies the array so reverse() can alter the array
+    this.mappings.slice().reverse().forEach((mapping) => {
+      startPositions = exports.backTransformPositions(startPositions, mapping);
+      endPositions = exports.backTransformPositions(endPositions, mapping);
+    });
+
+    const ranges = [];
+    for (let i = 0; i < startPositions.length; i += 1) {
+      ranges.push({position: startPositions[i], length: (endPositions[i] - startPositions[i]) + 1});
+    }
+
+    return ranges;
+  }
+};

@@ -66,3 +66,16 @@ backTransformRange({position: 6, length: 10}, transformations);
     }]
 
 ```
+
+### search(searchStr)
+- returns ranges of `searchStr` in a search index
+```
+const index = new SearchIndex('this  is a  test');
+index.search('is a test');
+=>  [{position: 6, length: 10}]
+
+const index = new SearchIndex('  hello   world ,  HELLO    WORLD   ');
+index.search('hello world');
+=>  [{position: 2, length: 13}, {position: 19, length: 14}]
+
+```
