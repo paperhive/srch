@@ -120,7 +120,7 @@ function transform(transformations, str) {
   let transformedStr = str;
   const mappings = [];
   transformations.forEach((transformation) => {
-    const {newStr, mapping} = transformation(transformedStr);
+    const {str: newStr, mapping} = transformation(transformedStr);
     transformedStr = newStr;
     mappings.push(mapping);
   });
@@ -140,19 +140,23 @@ exports.SearchIndex = class SearchIndex {
   // returns ranges
   search(searchStr) {
     const {transformedStr} = transform(this.transformations, searchStr);
-    const matchPositions = exports.findPositions(this.transformedStr, transformedStr);
-    // returns array of ranges: [{ length: 6, position: 138 }, ...]
-    let matchRanges = matchPositions.map(position => ({position, length: searchStr.length}));
+    if (transformedStr.length === 0) throw new Error('transformed string is empty');
 
-    // reverse(this.mappings).forEach(mapping => {
-    //   console.log(matchRanges);
-    //   matchRanges = matchRanges.map(range => {
-    //     const transformedRanges = srch.backTransformRange(range, mapping);
-    //     let length = 0;
-    //     // transformedRanges.
-    //   });
-    // });
-    // console.log(JSON.stringify(matchRanges, undefined, 2));
-    // return matchRanges;
+    // end position points to the last character
+    let startPositions = exports.findPositions(this.transformedStr, transformedStr);
+    let endPositions = startPositions.map(position => position + (transformedStr.length - 1));
+
+    // note: slice() copies the array so reverse() can alter the array
+    this.mappings.slice().reverse().forEach((mapping) => {
+      startPositions = exports.backTransformPositions(startPositions, mapping);
+      endPositions = exports.backTransformPositions(endPositions, mapping);
+    });
+
+    const ranges = [];
+    for (let i = 0; i < startPositions.length; i += 1) {
+      ranges.push({position: startPositions[i], length: (endPositions[i] - startPositions[i]) + 1});
+    }
+
+    return ranges;
   }
 };
