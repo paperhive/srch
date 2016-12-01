@@ -117,6 +117,7 @@ function transformLowercase(str) {
   };
 }
 
+
 function transform(transformations, str) {
   let transformedStr = str;
   const mappings = [];
