@@ -146,6 +146,19 @@ describe('backTransformRange', () => {
       .should.eql([]);
   });
 
+  it('should backtransform', () => {
+    srch.backTransformRange({position: 32, length: 1}, transformations)
+      .should.eql([{position: 0, length: 10}]);
+  });
+
+  it('should backtransform', () => {
+    srch.backTransformRange({position: 32, length: 2}, transformations)
+      .should.eql([
+        {position: 0, length: 10},
+        {position: 0, length: 1, transformation: transformations[4]},
+      ]);
+  });
+
   it('should throw if range outside of transformation ranges', () => {
     (() => srch.backTransformRange({position: 39, length: 1}, transformations))
       .should.throw('Out of range');
