@@ -83,6 +83,13 @@ describe('backTransformRange', () => {
       ]);
   });
 
+  it('should backtransform 1 range with position 2', () => {
+    srch.backTransformRange({position: 2, length: 1}, transformations)
+      .should.eql([
+        {position: 2, length: 1, transformation: transformations[0]},
+      ]);
+  });
+
   // no whitepace involved
   it('should backtransform 1 range with position 4', () => {
     srch.backTransformRange({position: 4, length: 2}, transformations)
@@ -96,6 +103,13 @@ describe('backTransformRange', () => {
     srch.backTransformRange({position: 6, length: 10}, transformations)
       .should.eql([
         {position: 0, length: 9, transformation: transformations[4]},
+      ]);
+  });
+
+  it('should backtransform 1 range with position 8', () => {
+    srch.backTransformRange({position: 8, length: 10}, transformations)
+      .should.eql([
+        {position: 1, length: 10, transformation: transformations[4]},
       ]);
   });
 
