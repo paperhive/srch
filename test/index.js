@@ -148,14 +148,14 @@ describe('backTransformRange', () => {
 
   it('should backtransform', () => {
     srch.backTransformRange({position: 32, length: 1}, transformations)
-      .should.eql([{position: 0, length: 1}]);
+      .should.eql([{position: 0, length: 1, transformation: transformations[5]}]);
   });
 
   it('should backtransform', () => {
     srch.backTransformRange({position: 32, length: 2}, transformations)
       .should.eql([
-        {position: 0, length: 10},
-        {position: 0, length: 1, transformation: transformations[4]},
+        {position: 0, length: 10, transformation: transformations[5]},
+        {position: 0, length: 1, transformation: transformations[6]},
       ]);
   });
 

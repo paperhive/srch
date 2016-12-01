@@ -86,10 +86,10 @@ exports.backTransformRange = function backTransformRange(range, transformations)
 
     if (rangeStart < transformation.transformed) {
       let newLength;
-      if (rangeEnd < transformation.transformed) {
+      if (rangeEnd <= transformation.transformed) {
         newLength = rangeEnd - rangeStart;
       } else {
-        newLength = transformation.transformed - rangeStart;
+        newLength = transformation.original;
       }
       if (rangeStart < transformation.original) {
         output.push({
