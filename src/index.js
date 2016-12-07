@@ -74,40 +74,41 @@ exports.backTransformPositions = function backTransformPositions(positions, mapp
   return transformedPositions;
 };
 
+
 exports.backTransformRange = function backTransformRange(range, transformations) {
-  let rangeCount = range.length + range.position;
-  let rangePosition = range.position;
+  let rangeStart = range.position;
+  let rangeEnd = range.length + range.position;
+
   const output = [];
   if (transformations.length === 0) throw new Error('Empty transformations');
   transformations.forEach((transformation) => {
-    if (rangeCount <= 0) return;
+    if (rangeStart < 0 || rangeEnd <= 0) return;
 
-    if (transformation.transformed > rangePosition) {
-      const newPosition = rangePosition;
+    if (rangeStart < transformation.transformed) {
       let newLength;
-      if (transformation.transformed > rangeCount) {
-        newLength = rangeCount;
+      if (rangeEnd <= transformation.transformed) {
+        newLength = rangeEnd - rangeStart;
       } else {
-        newLength = transformation.transformed - rangePosition;
+        newLength = transformation.original;
       }
-      rangePosition = 0;
-      if (transformation.original > 0) {
+      if (rangeStart < transformation.original) {
         output.push({
-          position: newPosition,
-          length: newLength,
+          position: rangeStart,
+          length: Math.min(newLength, transformation.original - rangeStart),
           transformation,
         });
       }
+      rangeStart = 0;
+    } else {
+      rangeStart -= transformation.transformed;
     }
-    if (rangePosition > 0) {
-      rangePosition -= transformation.transformed;
-    }
-    rangeCount -= transformation.transformed;
+    rangeEnd -= transformation.transformed;
   });
 
-  if (rangePosition !== 0) throw new Error('Out of range');
+  if (rangeStart !== 0) throw new Error('Out of range');
   return output;
 };
+
 
 function transformLowercase(str) {
   return {
@@ -115,6 +116,7 @@ function transformLowercase(str) {
     mapping: [{transformed: str.length, original: str.length}],
   };
 }
+
 
 function transform(transformations, str) {
   let transformedStr = str;

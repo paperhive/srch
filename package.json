@@ -1,6 +1,6 @@
 {
   "name": "srch",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "full text search",
   "main": "src/index.js",
   "scripts": {
