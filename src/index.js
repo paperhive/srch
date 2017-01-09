@@ -365,8 +365,7 @@ exports.transformDiacritics = function transformDiacritics(str) {
       mapping.push({ transformed: replacement.length, original: match.length });
 
       lastOffsetOriginal = offset + match.length;
-      lastOffsetTransformed += remain;
-      lastOffsetTransformed += replacement.length;
+      lastOffsetTransformed += remain + replacement.length;
     }
 
     return replacement;
