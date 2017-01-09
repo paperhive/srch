@@ -474,7 +474,8 @@ function transform(transformations, str) {
 
 exports.SearchIndex = class SearchIndex {
   constructor(str) {
-    this.transformations = [exports.transformSpaces, transformLowercase];
+    this.transformations =
+      [exports.transformSpaces, exports.transformDiacritics, transformLowercase];
 
     const {transformedStr, mapping} = transform(this.transformations, str);
     this.transformedStr = transformedStr;
