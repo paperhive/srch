@@ -3,6 +3,7 @@ function escapeRegExpCharacters(str) {
   return str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
 }
 
+// TODO: remove list if PR (https://github.com/andrewrk/node-diacritics/pull/23) is merged
 // cf. https://github.com/andrewrk/node-diacritics/blob/master/index.js
 const replacementList = [
   {
