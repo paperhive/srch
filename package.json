@@ -19,5 +19,8 @@
     "should": "^11.1.0"
   },
   "author": "Jennifer Gebske <jennifer@paperhive.org>",
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "dependencies": {
+    "diacritics": "github:jengeb/node-diacritics#export-lists"
+  }
 }
