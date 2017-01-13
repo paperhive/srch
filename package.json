@@ -18,6 +18,16 @@
     "nyc": "^10.0.0",
     "should": "^11.1.0"
   },
+  "keywords": [
+    "search",
+    "string",
+    "index",
+    "full text",
+    "mapping",
+    "lower case",
+    "diacritics",
+    "space"
+  ],
   "author": "Jennifer Gebske <jennifer@paperhive.org>",
   "license": "GPL-3.0",
   "repository": {
