@@ -24,6 +24,21 @@ transformSpaces('Hello   world');
     }
 ```
 
+### transformDiacritics(str)
+- removes diacritics of *str* 
+- returns an object consisting of *str* without diacritics and a mapping which indicates the relation between the original and the transformed string 
+``` 
+transformDiacritics('Straße');
+=>  {
+      str: 'Strasse',
+      mapping: [
+        { transformed: 4, original: 4 },
+        { transformed: 2, original: 1 },
+        { transformed: 1, original: 1 },
+      ],
+    }
+``` 
+
 ### backTransformPositions(positions, mapping)
 - returns the positions in the original string as an array
 ```

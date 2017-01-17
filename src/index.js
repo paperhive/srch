@@ -1,7 +1,11 @@
+const diacriticsMap = require('diacritics').diacriticsMap;
+
+
 // cf. https://github.com/sindresorhus/escape-string-regexp
 function escapeRegExpCharacters(str) {
   return str.replace(/[|\\{}()[\]^$+*?.]/g, '\\$&');
 }
+
 
 exports.findPositions = function findPositions(fullstr, searchstr) {
   const regExpSearchstr = new RegExp(escapeRegExpCharacters(searchstr), 'g');
@@ -27,6 +31,40 @@ exports.transformSpaces = function transformSpaces(str) {
     lastOffsetTransformed += remain;
 
     return ' ';
+  });
+
+  const lenRestTransformed = transformedStr.length - lastOffsetTransformed;
+  const lenRestOriginal = str.length - lastOffsetOriginal;
+
+  if (lenRestOriginal !== lenRestTransformed) throw new Error('strings out of sync');
+  if (lenRestOriginal) {
+    mapping.push({
+      transformed: transformedStr.length - lastOffsetTransformed,
+      original: str.length - lastOffsetOriginal,
+    });
+  }
+
+  return { str: transformedStr, mapping };
+};
+
+
+exports.transformDiacritics = function transformDiacritics(str) {
+  const mapping = [];
+  let lastOffsetOriginal = 0;
+  let lastOffsetTransformed = 0;
+  const transformedStr = str.replace(/[^\u0000-\u007e]/g, (match, offset) => {
+    const replacement = diacriticsMap[match] || match;
+
+    if (replacement.length > 1) {
+      const remain = offset - lastOffsetOriginal;
+      mapping.push({ transformed: remain, original: remain });
+      mapping.push({ transformed: replacement.length, original: match.length });
+
+      lastOffsetOriginal = offset + match.length;
+      lastOffsetTransformed += remain + replacement.length;
+    }
+
+    return replacement;
   });
 
   const lenRestTransformed = transformedStr.length - lastOffsetTransformed;
@@ -132,7 +170,8 @@ function transform(transformations, str) {
 
 exports.SearchIndex = class SearchIndex {
   constructor(str) {
-    this.transformations = [exports.transformSpaces, transformLowercase];
+    this.transformations =
+      [exports.transformSpaces, exports.transformDiacritics, transformLowercase];
 
     const {transformedStr, mapping} = transform(this.transformations, str);
     this.transformedStr = transformedStr;

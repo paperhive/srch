@@ -23,6 +23,7 @@ describe('findPositions()', () => {
   });
 });
 
+
 describe('transformSpaces', () => {
   it('should return input if no multiple spaces', () => {
     srch.transformSpaces('this is a test')
@@ -47,6 +48,54 @@ describe('transformSpaces', () => {
   });
 });
 
+
+describe('transformDiacritics', () => {
+  it('should return input if no diacritics', () => {
+    srch.transformDiacritics('this is a test')
+      .should.eql({
+        str: 'this is a test',
+        mapping: [{ transformed: 14, original: 14 }],
+      });
+  });
+
+  it('should remove diacritics (mapping: original shorter than transformed)', () => {
+    srch.transformDiacritics('Straße')
+      .should.eql({
+        str: 'Strasse',
+        mapping: [
+          { transformed: 4, original: 4 },
+          { transformed: 2, original: 1 },
+          { transformed: 1, original: 1 },
+        ],
+      });
+  });
+
+  it('should remove diacritics of 2 words (mapping: original shorter than transformed)', () => {
+    srch.transformDiacritics('Spaß mit Soße')
+      .should.eql({
+        str: 'Spass mit Sosse',
+        mapping: [
+          { transformed: 3, original: 3 },
+          { transformed: 2, original: 1 },
+          { transformed: 7, original: 7 },
+          { transformed: 2, original: 1 },
+          { transformed: 1, original: 1 },
+        ],
+      });
+  });
+
+  it('should remove diacritics (mapping: original equal to transformed)', () => {
+    srch.transformDiacritics('Iлｔèｒｎåｔïｏｎɑｌíƶａｔï߀ԉ')
+      .should.eql({
+        str: 'Internationalizati0n',
+        mapping: [
+          { transformed: 20, original: 20 },
+        ],
+      });
+  });
+});
+
+
 describe('backTransformPositions()', () => {
   it('should return the original positions', () => {
     // original:    'hällo  world'
@@ -63,6 +112,7 @@ describe('backTransformPositions()', () => {
     ).should.eql([0, 1, 1, 2, 3, 4, 5, 7, 8, 11]);
   });
 });
+
 
 describe('backTransformRange', () => {
   const transformations = [
@@ -174,6 +224,7 @@ describe('backTransformRange', () => {
       .should.throw('Empty transformations');
   });
 });
+
 
 describe('SearchIndex', () => {
   it('should find ranges', () => {

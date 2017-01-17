@@ -1,6 +1,6 @@
 {
   "name": "srch",
-  "version": "1.2.1",
+  "version": "1.3.0",
   "description": "full text search",
   "main": "src/index.js",
   "scripts": {
@@ -18,6 +18,26 @@
     "nyc": "^10.0.0",
     "should": "^11.1.0"
   },
+  "keywords": [
+    "search",
+    "string",
+    "index",
+    "full text",
+    "mapping",
+    "lower case",
+    "diacritics",
+    "space"
+  ],
   "author": "Jennifer Gebske <jennifer@paperhive.org>",
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/paperhive/srch.git"
+  },
+  "bugs": {
+    "url": "https://github.com/paperhive/srch/issues"
+  },
+  "dependencies": {
+    "diacritics": "^1.3.0"
+  }
 }
