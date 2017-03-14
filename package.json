@@ -10,7 +10,7 @@
     "test": "mocha test"
   },
   "devDependencies": {
-    "codecov": "^1.0.1",
+    "codecov": "^2.0.1",
     "eslint": "^3.5.0",
     "eslint-config-airbnb": "^14.0.0",
     "eslint-plugin-import": "^2.2.0",
