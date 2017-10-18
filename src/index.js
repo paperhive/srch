@@ -1,4 +1,4 @@
-const diacriticsMap = require('diacritics').diacriticsMap;
+const { diacriticsMap } = require('diacritics');
 
 
 // cf. https://github.com/sindresorhus/escape-string-regexp
@@ -97,9 +97,8 @@ exports.backTransformPositions = function backTransformPositions(positions, mapp
       // transform position
       const normalizedPosition = positions[positionIndex] - offsetTransformed;
 
-      transformedPositions.push(
-        offsetOriginal + Math.min(normalizedPosition, map.original - 1)
-      );
+      transformedPositions.push(offsetOriginal
+                                + Math.min(normalizedPosition, map.original - 1));
 
       positionIndex += 1;
     }
