@@ -52,6 +52,7 @@ exports.transformDiacritics = function transformDiacritics(str) {
   const mapping = [];
   let lastOffsetOriginal = 0;
   let lastOffsetTransformed = 0;
+  // eslint-disable-next-line no-control-regex
   const transformedStr = str.replace(/[^\u0000-\u007e]/g, (match, offset) => {
     const replacement = diacriticsMap[match] || match;
 
