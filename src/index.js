@@ -93,8 +93,8 @@ exports.backTransformPositions = function backTransformPositions(positions, mapp
     const map = mapping[i];
 
     // transform all positions in this map
-    while (positionIndex < positions.length &&
-        positions[positionIndex] < offsetTransformed + map.transformed) {
+    while (positionIndex < positions.length
+        && positions[positionIndex] < offsetTransformed + map.transformed) {
       // transform position
       const normalizedPosition = positions[positionIndex] - offsetTransformed;
 
@@ -170,8 +170,11 @@ function transform(transformations, str) {
 
 exports.SearchIndex = class SearchIndex {
   constructor(str) {
-    this.transformations =
-      [exports.transformSpaces, exports.transformDiacritics, transformLowercase];
+    this.transformations = [
+      exports.transformSpaces,
+      exports.transformDiacritics,
+      transformLowercase
+    ];
 
     const {transformedStr, mapping} = transform(this.transformations, str);
     this.transformedStr = transformedStr;
